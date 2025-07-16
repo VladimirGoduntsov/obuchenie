@@ -108,7 +108,7 @@ func readTransaction(filePath string) map[string]float64 {
 		//if i == 0 {
 		//continue
 		//}
-		if len(record) >= 2 {
+		if len(record) == 2 {
 			userID := record[0]
 			amount, err := strconv.ParseFloat(record[1], 64)
 			if err != nil {
