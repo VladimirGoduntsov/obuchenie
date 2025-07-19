@@ -65,9 +65,9 @@ func readUsers(filePath string) []User {
 
 	reader := csv.NewReader(file)
 	reader.Comma = ';'
-	// reader.FieldsPerRecord = -1
 
 	rawData, err := reader.ReadAll()
+
 	if err != nil {
 		fmt.Println("Ошибка при чтении данных", err)
 		return []User{}
@@ -76,9 +76,7 @@ func readUsers(filePath string) []User {
 
 	var users []User
 	for _, record := range rawData {
-		//if i == 0 {
-		//	continue
-		//}
+
 		if len(record) == 2 {
 			users = append(users, User{ID: record[0], Name: record[1]})
 		}
@@ -95,7 +93,6 @@ func readTransaction(filePath string) map[string]float64 {
 
 	reader := csv.NewReader(file)
 	reader.Comma = ';'
-	//reader.FieldsPerRecord = -1
 
 	rawData, err := reader.ReadAll()
 	if err != nil {
@@ -105,9 +102,7 @@ func readTransaction(filePath string) map[string]float64 {
 
 	transactions := make(map[string]float64)
 	for _, record := range rawData {
-		//if i == 0 {
-		//continue
-		//}
+
 		if len(record) == 2 {
 			userID := record[0]
 			amount, err := strconv.ParseFloat(record[1], 64)
