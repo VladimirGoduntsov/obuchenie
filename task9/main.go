@@ -77,13 +77,12 @@ func readManager(cat string) []manager {
 }
 
 func sendEmailWithCC(to []string, cc []string, subject, body string, attachmentPath string) error {
-	from := "your-email@yandex.ru" 
-	password := "your-password"    
+	from := "your-email@yandex.ru"
+	password := "your-password"
 
 	smtpHost := "smtp.yandex.ru"
 	smtpPort := "587"
 
-	
 	headers := make(map[string]string)
 	headers["From"] = from
 	headers["To"] = joinEmails(to)
@@ -98,25 +97,22 @@ func sendEmailWithCC(to []string, cc []string, subject, body string, attachmentP
 	}
 	msg.WriteString("\r\n")
 
-	
 	msg.WriteString("--boundary\r\n")
 	msg.WriteString("Content-Type: text/plain; charset=\"utf-8\"\r\n")
 	msg.WriteString("\r\n")
 	msg.WriteString(body)
 	msg.WriteString("\r\n")
 
-	
 	msg.WriteString("--boundary\r\n")
 	msg.WriteString("Content-Type: application/pdf; name=\"invoice.pdf\"\r\n")
 	msg.WriteString("Content-Disposition: attachment; filename=\"invoice.pdf\"\r\n")
 	msg.WriteString("Content-Transfer-Encoding: base64\r\n")
 	msg.WriteString("\r\n")
-	
+
 	msg.WriteString("\r\n--boundary--\r\n")
 
-	
 	auth := smtp.PlainAuth("", from, password, smtpHost)
-	recipients := append(to, cc...) 
+	recipients := append(to, cc...)
 	err := smtp.SendMail(smtpHost+":"+smtpPort, auth, from, recipients, msg.Bytes())
 	if err != nil {
 		return fmt.Errorf("ошибка отправки письма: %w", err)
@@ -130,39 +126,34 @@ func joinEmails(emails []string) string {
 }
 
 func main() {
-	
-	category := "море" 
+
+	category := "море"
 	operators := readManager(category)
 	fmt.Println("Операторы море:", operators)
 
 	directors := readDirectors(category)
 	fmt.Println("Директора море:", directors)
 
-	
 	text, err := os.ReadFile("tekst.txt")
 	if err != nil {
 		log.Fatalf("Не удалось прочитать текст из файла: %v", err)
 	}
 
-	
 	fmt.Print("Введите тему письма: ")
 	scanner := bufio.NewScanner(os.Stdin)
 	scanner.Scan()
 	subject := scanner.Text()
 
-	
 	operatorEmails := make([]string, len(operators))
 	for i, op := range operators {
 		operatorEmails[i] = op.Email
 	}
 
-	
 	directorEmails := make([]string, len(directors))
 	for i, dir := range directors {
 		directorEmails[i] = dir.Email
 	}
 
-	
 	err = sendEmailWithCC(operatorEmails, directorEmails, subject, string(text), "invoice.pdf")
 	if err != nil {
 		log.Printf("Ошибка отправки письма: %v", err)
