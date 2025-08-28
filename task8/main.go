@@ -6,7 +6,7 @@ import (
 )
 
 func main() {
-	
+
 	collection := &cars.AutoCollection{}
 
 	newCar1 := cars.Car{Model: "Toyota", Year: 2025, Price: 50000.00}
@@ -23,32 +23,27 @@ func main() {
 	collection.AddNewCar(newCar5)
 	collection.AddNewCar(newCar6)
 
-	
 	collection.PrintInfo()
 
-	
-	fmt.Println("Sorted cars:")
-	for _, car := range collection.GetSortedCars() {
+	fmt.Println("Sorted cars by years:")
+	collection.SortCarByYear()
+	for _, car := range collection.GetCars() {
 		fmt.Printf("Modael: %s, Year: %d, Price: %.2f USD\n", car.Model, car.Year, car.Price)
 	}
 
-	
 	collection.DeleteLastCar()
 
-	
 	fmt.Println("\nПосле удаления последней машины:")
 	collection.PrintInfo()
 
-	
 	fmt.Println("Отсортированные машины:")
-	for _, car := range collection.GetSortedCars() {
+	for _, car := range collection.GetCars() {
 		fmt.Printf("Model: %s, Year: %d, Price: %.2f USD\n", car.Model, car.Year, car.Price)
 	}
 
-fmt.Println("Sorted cars:")
-	for _, car := range collection.GetSortedCars2() {
+	fmt.Println("Sorted cars by price:")
+	collection.SortCarByPrice()
+	for _, car := range collection.GetCars() {
 		fmt.Printf("Model: %s, Year: %d, Price: %.2f USD\n", car.Model, car.Year, car.Price)
 	}
 }
-	
-
